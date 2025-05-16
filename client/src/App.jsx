@@ -10,7 +10,7 @@ function App() {
   return (
       <div>
         {!isOwnerPath && <NavBar/>}
-        <div>
+        <div className='w-full h-full'>
           <Routes>
             <Route path='/' element={<Home/>}/>
           </Routes>

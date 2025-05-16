@@ -4,8 +4,8 @@ import { assets, cities } from '../assets/assets'
 function Hero() {
   return (
     <div className='flex flex-col items-center justify-center h-screen bg-hero bg-cover bg-center bg-[url("/src/assets/heroImage.png")] bg-no-repeat'>
-        <p className='bg-[#49b9ff]/50 px-3 py-1 rounded-full mt-20'>The Ultimate Hotel Experience</p>
-        <h1 className='md:text-5xl font-bold text-center text-white'>Find Your Perfect Stay</h1>
+        <p className='bg-[#49b9ff]/50 px-3 py-1 rounded-full md:mt-20 mt-32'>The Ultimate Hotel Experience</p>
+        <h1 className='md:text-5xl font-bold text-center  text-white'>Find Your Perfect Stay</h1>
         <p className='font-playfair md:text-lg text-center text-white mt-4'>Discover the best hotels and experiences tailored just for you.</p>
         <form className='bg-white text-gray-500 rounded-lg px-6 py-4  flex flex-col md:flex-row max-md:items-start gap-4 max-md:mx-auto my-2'>
 
