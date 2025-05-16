@@ -1,6 +1,7 @@
-import { useLocation } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import './App.css'
 import NavBar from './components/NavBar'
+import Home from './pages/Home';
 
 function App() {
 
@@ -9,6 +10,11 @@ function App() {
   return (
       <div>
         {!isOwnerPath && <NavBar/>}
+        <div>
+          <Routes>
+            <Route path='/' element={<Home/>}/>
+          </Routes>
+        </div>
       </div>
   )
 }
