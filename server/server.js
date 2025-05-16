@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-
+import connectDB from './config/dbConnection.js';
+import { configDotenv } from 'dotenv';
+configDotenv();
 
 
 const app = express();
@@ -14,6 +16,7 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+app.listen(PORT, async() => {
+    await connectDB();
     console.log(`Server is running on port ${PORT}`);
 });
