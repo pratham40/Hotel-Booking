@@ -4,10 +4,15 @@ import connectDB from './config/dbConnection.js';
 import { configDotenv } from 'dotenv';
 configDotenv();
 
+import {clerkMiddleware} from '@clerk/express'
+
+import morgan from 'morgan';
 
 const app = express();
 app.use(cors());
-
+app.use(express.json());
+app.use(clerkMiddleware());
+app.use(morgan('dev'));
 
 app.get('/', (req, res) => {
     res.send('API is running...');
