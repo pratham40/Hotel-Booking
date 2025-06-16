@@ -7,6 +7,7 @@ configDotenv();
 import {clerkMiddleware} from '@clerk/express'
 
 import morgan from 'morgan';
+import clerkWebhook from './controllers/clerkWebhook.js';
 
 const app = express();
 app.use(cors());
@@ -18,6 +19,8 @@ app.get('/', (req, res) => {
     res.send('API is running...');
 });
 
+
+app.use("/api/clerk",clerkWebhook)
 
 const PORT = process.env.PORT || 5000;
 
