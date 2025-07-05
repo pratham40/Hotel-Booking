@@ -1,6 +1,6 @@
 import express from 'express';
 import { Webhook } from 'svix';
-import User from '../models/User.js'; // Assuming you have this
+import User from '../models/user.model.js'; // Assuming you have this
 
 const router = express.Router();
 
