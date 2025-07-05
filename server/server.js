@@ -28,6 +28,11 @@ app.use(express.json());
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, async() => {
-    await connectDB();
-    console.log(`Server is running on port ${PORT}`);
+    try {
+        await connectDB();
+        console.log(`Server is running on port ${PORT}`);
+    } catch (error) {
+        console.error('❌ Failed to connect to MongoDB:', err.message);
+        process.exit(1);
+    }
 });
