@@ -1,7 +1,10 @@
+import express from "express";
 import User from "../models/user.model.js";
 import { Webhook } from "svix";
 
-const clerkWebhook = async (req,res) => {
+const router = express.Router();
+
+router.post("/webhook",async (req,res) => {
     try {
         const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
 
@@ -55,7 +58,6 @@ const clerkWebhook = async (req,res) => {
         console.error("Error processing Clerk webhook:", error);
         res.status(500).json({ message: "Internal Server Error" });
     }
-}
+})
 
-
-export default clerkWebhook;
+export default router;
