@@ -11,7 +11,6 @@ import clerkWebhook from './controllers/clerkWebhook.js';
 
 const app = express();
 app.use(cors());
-app.use(express.json());
 app.use(clerkMiddleware());
 app.use(morgan('dev'));
 
@@ -21,6 +20,10 @@ app.get('/', (req, res) => {
 
 
 app.use("/api/clerk",express.raw({type:'application/json' }),clerkWebhook)
+
+
+
+app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
 
