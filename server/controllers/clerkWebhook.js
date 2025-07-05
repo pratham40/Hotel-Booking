@@ -1,63 +1,40 @@
-import express from "express";
-import User from "../models/user.model.js";
-import { Webhook } from "svix";
+import express from 'express';
+import { Webhook } from 'svix';
+import User from '../models/User.js'; // Assuming you have this
 
 const router = express.Router();
 
-router.post("/webhook",async (req,res) => {
+router.post('/webhook', async (req, res) => {
+    const payload = req.body;  // Raw buffer due to express.raw
+    const headers = req.headers;
+    const secret = process.env.CLERK_WEBHOOK_SECRET;
+
+    const wh = new Webhook(secret);
+
+    let evt;
     try {
-        const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
+        evt = wh.verify(payload, headers);
+        console.log('✅ Event:', evt);
 
-        const header = {
-            "svix-id": req.headers["svix-id"],
-            "svix-timestamp": req.headers["svix-timestamp"],
-            "svix-signature": req.headers["svix-signature"]
+        if (evt.type === 'user.created') {
+            const { id, email_addresses, first_name, last_name } = evt.data;
+            const email = email_addresses[0]?.email_address;
+
+            await User.create({
+                clerkId: id,
+                email,
+                firstName: first_name,
+                lastName: last_name
+            });
+
+            console.log(`User ${email} created.`);
         }
 
-        await whook.verify(
-            JSON.stringify(req.body),
-            header
-        )
-
-        const {data,type}=req.body;
-
-        const userData =  {
-            _id: data.id,
-            email: data.email_addresses[0].email_address,
-            username: data.first_name + " " + data.last_name,
-            image: data.image_url,
-        }
-
-
-        switch(key){
-            case "user.created":{
-                await User.create(userData);
-                break;
-            }
-            case "user.updated":{
-                await User.findByIdAndUpdate(
-                    { _id: userData._id },
-                    userData,
-                    { new: true}
-                );
-                break;
-            }
-            case "user.deleted":{
-                await User.findByIdAndDelete(userData._id);
-                break;
-            }
-            default: {
-                console.log("Unhandled event type:", type);
-                break;
-            }
-        }
-
-        res.status(200).json({ message: "Webhook processed successfully" });    
-        
-    } catch (error) {
-        console.error("Error processing Clerk webhook:", error);
-        res.status(500).json({ message: "Internal Server Error" });
+        res.status(200).json({ success: true });
+    } catch (err) {
+        console.error('Webhook signature failed:', err.message);
+        res.status(400).json({ error: 'Invalid signature' });
     }
-})
+});
 
 export default router;
