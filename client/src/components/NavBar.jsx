@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { assets } from '../assets/assets';
 import { useClerk, UserButton, useUser } from '@clerk/clerk-react';
+import { CiMenuFries, CiSearch } from 'react-icons/ci';
+import { IoClose } from 'react-icons/io5';
 
 // Icon Component
 const BookIcons = () => <i className="fa-solid fa-book"></i>;
@@ -69,7 +71,8 @@ const NavBar = () => {
 
             {/* Desktop Right Side */}
             <div className="hidden md:flex items-center gap-4">
-                <img src={assets.searchIcon} alt="Search" className={`h-7 transition-all duration-500 ${isScrolled ? 'invert' : ''}`} />
+
+                <CiSearch/>
 
                 {user ? (
                     <UserButton>
@@ -90,7 +93,7 @@ const NavBar = () => {
             {/* Mobile Menu Button */}
             <div className="flex items-center md:hidden">
                 <button onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Toggle Menu">
-                    <img src={assets.menuIcon} alt="Menu" className={`h-4 ${isScrolled ? 'invert' : ''}`} />
+                    < CiMenuFries className={`h-4 ${isScrolled ? 'invert' : ''}`} />
                 </button>
             </div>
 
@@ -98,7 +101,7 @@ const NavBar = () => {
             <div className={`fixed top-0 left-0 w-full h-screen bg-white flex flex-col items-center justify-center gap-6 text-gray-800 text-base font-medium transition-transform duration-500 ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                 
                 <button onClick={() => setIsMenuOpen(false)} aria-label="Close Menu" className="absolute top-4 right-4">
-                    <img src={assets.closeIcon} alt="Close" className="h-6.5" />
+                    <IoClose className="h-6.5" />
                 </button>
 
                 {user && (

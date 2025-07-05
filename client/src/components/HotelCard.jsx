@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { assets } from '../assets/assets.js'
+import { FaLocationArrow } from 'react-icons/fa'
 
 function HotelCard({ room, idx }) {
   return (
@@ -28,7 +29,7 @@ function HotelCard({ room, idx }) {
           </div>
         </div>
         <div className="flex items-center text-gray-500 text-sm mb-3 gap-1">
-          <img src={assets.locationIcon} alt="" className="w-4 h-4" />
+          <FaLocationArrow/>
           <span>{room.hotel.address}</span>
         </div>
         <div className="flex items-center justify-between mt-4">
