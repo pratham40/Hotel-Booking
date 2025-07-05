@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
 });
 
 
-app.use("/api/clerk",clerkWebhook)
+app.use("/api/clerk",express.raw({type:'application/json' }),clerkWebhook)
 
 const PORT = process.env.PORT || 5000;
 
