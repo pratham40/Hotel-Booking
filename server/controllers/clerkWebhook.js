@@ -31,12 +31,6 @@ router.post('/webhook', async (req, res) => {
             return res.status(200).json({ success: true,
                 message: `User ${email} created successfully.`
             });
-        } else if (evt.type === 'user.deleted'){
-            await User.deleteOne({email:email});
-            console.log(`User ${email} deleted.`);
-            return res.status(200).json({ success: true,
-                message: `User ${email} deleted successfully.`
-            });
         }
     } catch (err) {
         console.error('Webhook signature failed:', err.message);
