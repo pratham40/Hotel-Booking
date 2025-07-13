@@ -16,10 +16,12 @@ router.post('/webhook', async (req, res) => {
         evt = wh.verify(payload, headers);
         console.log('✅ Event:', evt);
 
-        const { id, email_addresses, first_name, last_name,image_url } = evt.data;
-        const email = email_addresses[0]?.email_address;
+        const id = evt.data.id;
 
         if (evt.type === 'user.created') {
+            const {email_addresses, first_name, last_name,image_url } = evt.data;
+            const email = email_addresses[0]?.email_address;
+
             await User.create({
                 email,
                 username: first_name+' ' + last_name,
