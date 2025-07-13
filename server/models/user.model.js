@@ -1,13 +1,17 @@
 import mongoose , {Schema} from 'mongoose';
 
 const userSchema = new Schema({
+    clerkId:{
+        type: String,
+        required: true,
+    },
     username: {
         type: String,
         trim: true,
-        maxlength: 100
+        required: true,
     },
     avatar:{
-        type: String,
+        type: String
     },
     email: {
         type: String,
@@ -16,10 +20,6 @@ const userSchema = new Schema({
         lowercase: true,
         trim: true,
         maxlength: 100
-    },
-    password: {
-        type: String,
-        minlength: 6
     },
     role: {
         type: String,

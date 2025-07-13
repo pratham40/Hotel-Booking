@@ -23,7 +23,8 @@ router.post('/webhook', async (req, res) => {
             await User.create({
                 email,
                 username: first_name+' ' + last_name,
-                avatar:image_url
+                avatar:image_url,
+                clerkId: id
             });
 
             console.log(`User ${email} created.`);
@@ -31,6 +32,9 @@ router.post('/webhook', async (req, res) => {
             return res.status(200).json({ success: true,
                 message: `User ${email} created successfully.`
             });
+        }else if(evt.type === 'user.deleted') {
+            await User.deleteOne({ clerkId: id });
+            console.log(`User with ID ${id} deleted.`);
         }
     } catch (err) {
         console.error('Webhook signature failed:', err.message);
