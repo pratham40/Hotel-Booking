@@ -33,6 +33,7 @@ router.post('/webhook', async (req, res) => {
                 message: `User ${email} created successfully.`
             });
         }else if(evt.type === 'user.deleted') {
+            console.log(`User with ID ${id} deleted.`);
             await User.deleteOne({ clerkId: id });
             console.log(`User with ID ${id} deleted.`);
         }
