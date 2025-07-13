@@ -1,8 +1,13 @@
 import express from 'express';
 import { authMiddleware } from '../middlewares/auth.middleware.js';
-import { getUserData } from '../controllers/user.controller.js';
+import { getUserData, recentSerachCities } from '../controllers/user.controller.js';
 
-const router = express.Router();
+const userRouter = express.Router();
 
 
-router.get("/",authMiddleware,getUserData)
+userRouter.get("/",authMiddleware,getUserData)
+
+userRouter.post("/store-recent-search",authMiddleware,recentSerachCities)
+
+
+export default userRouter;
