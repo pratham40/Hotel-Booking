@@ -10,6 +10,7 @@ import morgan from 'morgan';
 import clerkWebhook from './controllers/clerkWebhook.js';
 import hotelRouter from './routes/hotel.route.js';
 import roomRouter from './routes/room.routes.js';
+import bookingRouter from './routes/booking.route.js';
 
 const app = express();
 app.use(cors());
@@ -41,6 +42,8 @@ app.use("/api/users",userRouter)
 app.use("/api/hotels",hotelRouter)
 
 app.use("/api/rooms",roomRouter)
+
+app.use("/api/bookings",bookingRouter);
 
 const PORT = process.env.PORT || 5000;
 
