@@ -1,7 +1,7 @@
-const { checkAvailabilityApi, createBooking, getUserBooking, getHotelBooking } = require("../controllers/booking.controller");
-const { authMiddleware } = require("../middlewares/auth.middleware");
-
-const bookingRouter = require("express").Router();
+import express from "express";
+import { checkAvailabilityApi, createBooking, getHotelBooking, getUserBooking } from "../controllers/booking.controller.js";
+import {authMiddleware} from "../middlewares/auth.middleware.js"
+const bookingRouter = express.Router();
 
 bookingRouter.post("/check-availability",checkAvailabilityApi);
 bookingRouter.post("/book",authMiddleware,createBooking);

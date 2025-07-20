@@ -1,8 +1,8 @@
 import mongoose , {Schema} from 'mongoose';
 
 const userSchema = new Schema({
-    clerkId:{
-        type: String,
+    _id:{
+        type:String,
         required: true,
     },
     username: {

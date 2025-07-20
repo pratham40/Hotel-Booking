@@ -1,7 +1,7 @@
 
-import Booking from "../models/booking.model";
-import Room from "../models/room.model";
-import Hotel from "../models/hotel.model";
+import Booking from "../models/booking.model.js";
+import Room from "../models/room.model.js";
+import Hotel from "../models/hotel.model.js";
 
 
 async function checkAvailability({checkInDate,checkOutDate,room}) {
