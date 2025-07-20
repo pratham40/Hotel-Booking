@@ -23,10 +23,10 @@ router.post('/webhook', async (req, res) => {
             const email = email_addresses[0]?.email_address;
 
             await User.create({
+                _id: id,
                 email,
                 username: first_name+' ' + last_name,
-                avatar:image_url,
-                clerkId: id
+                avatar:image_url
             });
 
             console.log(`User ${email} created.`);
@@ -35,8 +35,8 @@ router.post('/webhook', async (req, res) => {
                 message: `User ${email} created successfully.`
             });
         }else if(evt.type === 'user.deleted') {
-            await User.deleteOne({ clerkId: id });
-            return res.status(200).json({ success: true, message: `User with clerkId ${id} deleted successfully.` });
+            await User.deleteOne({ _id: id });
+            return res.status(200).json({ success: true, message: `User with id ${id} deleted successfully.` });
         }
     } catch (err) {
         console.error('Webhook signature failed:', err.message);
