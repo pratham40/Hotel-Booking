@@ -14,10 +14,8 @@ import bookingRouter from './routes/booking.route.js';
 
 const app = express();
 app.use(cors());
-app.use(clerkMiddleware());
 app.use(morgan('dev'));
-
-// Cloudinary configuration
+app.use(express.json());
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -26,16 +24,16 @@ cloudinary.config({
 })
 
 
+app.use(clerkMiddleware());
+
+
+
 app.get('/', (req, res) => {
     res.send('API is running...');
 });
 
 
-app.use("/api/clerk",express.raw({type:'application/json' }),clerkWebhook)
-
-
-
-app.use(express.json());
+app.use("/api/clerk",express.json({type:'application/json'}),clerkWebhook)
 
 app.use("/api/users",userRouter)
 
