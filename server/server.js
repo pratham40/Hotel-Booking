@@ -32,9 +32,9 @@ app.get('/', (req, res) => {
 });
 
 
-app.use("/api/clerk",express.json({type:'application/json'}),clerkWebhook)
+app.use("/clerk",express.json({type:'application/json'}),clerkWebhook)
 
-app.use("/api/users",userRouter)
+app.use("/api/users",express.json(),userRouter)
 
 app.use("/api/hotels",hotelRouter)
 
