@@ -15,7 +15,6 @@ import bookingRouter from './routes/booking.route.js';
 const app = express();
 app.use(cors());
 app.use(morgan('dev'));
-app.use(express.json());
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
