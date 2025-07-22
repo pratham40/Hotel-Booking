@@ -5,21 +5,22 @@ import User from '../models/user.model.js'; // Assuming you have this
 const router = express.Router();
 
 router.post('/webhook', async (req, res) => {
-    const payload = req.body;  // Raw buffer due to express.raw
-    const headers = req.headers;
-    const secret = process.env.CLERK_WEBHOOK_SECRET;
 
-    const wh = new Webhook(secret);
 
-    let evt;
+ const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
+
+        await whook.verify(JSON.stringify(req.body), {
+            "svix-id": req.headers["svix-id"],
+            "svix-timestamp": req.headers["svix-timestamp"],
+            "svix-signature": req.headers["svix-signature"]
+        })
+
+        const {data, type} = req.body;
+
     try {
-        evt = wh.verify(payload, headers);
-        console.log('✅ Event:', evt);
 
-        const id = evt.data.id;
-
-        if (evt.type === 'user.created') {
-            const {email_addresses, first_name, last_name,image_url } = evt.data;
+        if (type === 'user.created') {
+            const {id,email_addresses, first_name, last_name,image_url } = data;
             const email = email_addresses[0]?.email_address;
 
             await User.create({
