@@ -15,8 +15,10 @@ export const createRoom = async (req, res) => {
             });
         }
 
+        let uploadImages = [];
+
         if (req.files) {
-            const uploadImages = req.files.map(async(file)=>{
+            uploadImages = req.files.map(async(file)=>{
                 const result = await cloudinary.uploader.upload(file.path, {
                     folder: "rooms"
                 });
