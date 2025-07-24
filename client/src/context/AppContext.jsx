@@ -26,6 +26,29 @@ export function AppProvider({children}) {
 
     const [searchCity,setSearchCity] = useState([]);
 
+    const [rooms, setRooms] = useState([]);
+
+    async function fetchRooms() {
+        try {
+            const token = await getToken();
+            const {data} = await axios.get("/api/rooms/", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            if (data.success) {
+                setRooms(data.rooms);
+                toast.success("Rooms fetched successfully");
+            } else {
+                toast.error(data.message || "Failed to fetch rooms");
+            }
+        } catch (error) {
+            console.error("Error fetching rooms:", error);
+            toast.error("Failed to fetch rooms. Please try again later.");
+        }
+    }
+
     async function fetchUser() {
         try {
             // Check if user is authenticated and get token
@@ -58,6 +81,10 @@ export function AppProvider({children}) {
         }
     },[user])
 
+    useEffect(()=>{
+        fetchRooms();
+    },[])
+
     const value = {
         currency,
         navigate,
@@ -69,7 +96,9 @@ export function AppProvider({children}) {
         showHotelReg,
         setShowHotelReg,
         searchCity,
-        setSearchCity
+        setSearchCity,
+        rooms,
+        setRooms
     }
 
     return (
