@@ -123,9 +123,11 @@ export const getOwnerRooms = async (req, res) => {
 
 export const toggleRoomAvailability = async (req, res) => {
     try {
-        const {roomId} = req.body;
 
-        const room = await Room.findById(roomId);
+        console.log("Toggling room availability");
+        const {roomId} = req.body;
+        const _id = roomId;
+        const room = await Room.findById(_id);
 
         if (!room) {
             return res.status(404).json({
@@ -133,6 +135,8 @@ export const toggleRoomAvailability = async (req, res) => {
                 message: "Room not found"
             });
         }
+
+        console.log(room)
 
 
         room.isAvailable = !room.isAvailable;
