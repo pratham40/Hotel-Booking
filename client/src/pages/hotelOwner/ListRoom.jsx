@@ -31,7 +31,7 @@ function ListRoom() {
 
 async function toggleRoomAvailability(roomId) {
   try {
-    const token = await getToken(); // ⬅️ missing in your original code
+    const token = await getToken(); 
     const { data } = await axios.post('/api/rooms/toogle-avalibility', {
       roomId
     }, {
