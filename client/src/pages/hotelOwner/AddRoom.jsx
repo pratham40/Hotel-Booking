@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import Title from '../../components/Title';
 import { MdOutlineCloudUpload } from 'react-icons/md';
+import { useAppContext } from '../../context/AppContext';
+import toast from 'react-hot-toast';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 function AddRoom() {
+
+  const {axios,getToken} = useAppContext();
+
   const [images, setImages] = useState({
     1: null,
     2: null,
@@ -30,8 +36,78 @@ function AddRoom() {
     console.log(images)
   };
 
+  const [loading, setLoading] = useState(false);
+
+  async function handleSumbit(e) {
+    e.preventDefault();
+
+    if (!inputData.roomType || !inputData.pricePerNight || !Object.values(images).some((img)=> img)) {
+      toast.error('Please fill all fields and upload at least one image.');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const token = await getToken();
+      const formData = new FormData();
+      formData.append('roomType', inputData.roomType);
+      formData.append('pricePerNight', inputData.pricePerNight);
+      const amenities = Object.keys(inputData.amenities).filter(amenity => inputData.amenities[amenity]);
+      console.log(amenities);
+
+      formData.append('amenities', JSON.stringify(amenities));
+
+      Object.keys(images).forEach((key)=>{
+        images[key] && formData.append(`images`, images[key]);
+      })
+
+      const {data} = await axios.post('/api/rooms',formData,{
+        headers:{
+          Authorization: `Bearer ${token}`,
+        }
+      })
+      
+      if (data.success) {
+        toast.success('Room added successfully!');
+        setInputData({
+          roomType: '',
+          pricePerNight: 0,
+          amenities: {
+            'Free Wifi': false,
+            'Free Breakfast': false,
+            'Room Service': false,
+            'Mountain View': false,
+            'Pool Access': false,
+          },
+        })
+        setImages({
+          1: null,
+          2: null,
+          3: null,
+          4: null,
+        });
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error('Error adding room:', error);
+      toast.error('Failed to add room. Please try again.');
+      setLoading(false);
+    }
+
+  }
+
+  if (loading) {
+    return <AiOutlineLoading3Quarters
+      className="animate-spin text-4xl text-blue-600 mx-auto my-20"
+      style={{ display: 'block' }}
+    />
+  }
+
   return (
-    <form className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg">
+    <form
+    onSubmit={handleSumbit}
+    className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg">
       {/* Title Section */}
       <Title
         align="left"

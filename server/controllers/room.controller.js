@@ -4,7 +4,7 @@ import Room from "../models/room.model.js";
 
 export const createRoom = async (req, res) => {
     try {
-        const {roomType,pricePerNight,amenties} = req.body;
+        const {roomType,pricePerNight,amenities} = req.body;
 
         const hotel = await Hotel.findOne({owner: req.auth.userId});
 
@@ -29,11 +29,17 @@ export const createRoom = async (req, res) => {
 
         const images=await Promise.all(uploadImages)
 
+        console.log(images);
+
+        let amenties = Array.isArray(amenities) ? amenities : amenities.split(',');
+
+
+
         await Room.create({
             hotel: hotel._id,
             roomType,
             pricePerNight:+pricePerNight,
-            amenties:JSON.parse(amenties),
+            amenties,
             images
         })
 
@@ -44,7 +50,7 @@ export const createRoom = async (req, res) => {
                 hotel: hotel._id,
                 roomType,
                 pricePerNight,
-                amenties: JSON.parse(amenties),
+                amenties: amenties,
                 images
             }
         });
