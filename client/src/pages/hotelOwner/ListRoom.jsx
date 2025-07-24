@@ -1,9 +1,63 @@
 import Title from "../../components/Title"
-import React, { useState } from 'react'
-import {roomsDummyData} from "../../assets/assets"
+import  {  useEffect, useState } from 'react'
+import toast from "react-hot-toast"
+import { useAppContext } from "../../context/AppContext"
 function ListRoom() {
-  const [rooms, setRooms] = useState(roomsDummyData)
-  console.log(rooms)
+  const [rooms, setRooms] = useState([])
+
+  const {axios,getToken,user} = useAppContext();
+
+  async function fetchRooms() {
+    try {
+      const token = await getToken()
+      const {data} = await axios.get("/api/rooms/owner",{
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      if (data.success) {
+        setRooms(data.rooms)
+        console.log(data.rooms)
+        toast.success("Rooms fetched successfully")
+      }else{
+        toast.error(data.message || "Failed to fetch rooms")
+      }
+    } catch (error) {
+      console.error("Error fetching rooms:", error)
+      toast.error("Failed to fetch rooms. Please try again later.")
+    }
+  }
+
+async function toggleRoomAvailability(roomId) {
+  try {
+    const token = await getToken(); // ⬅️ missing in your original code
+    const { data } = await axios.post('/api/rooms/toogle-avalibility', {
+      roomId
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (data.success) {
+      toast.success("Room availability toggled successfully");
+      fetchRooms();
+    }
+  } catch (error) {
+    console.error("Error toggling room availability:", error);
+    toast.error("Failed to toggle room availability. Please try again later.");
+  }
+}
+
+
+
+  useEffect(()=>{
+    if (user) {
+      fetchRooms()
+    }
+  },[user])
+
   return (
     <div>
       <Title
@@ -39,7 +93,7 @@ function ListRoom() {
                     </td>
                     <td className="p-4 text-gray-600">
                       {
-                        room.amenities.join(', ')
+                        room.amenties.join(', ')
                       }
                     </td>
                     <td className="p-4 text-gray-600">
@@ -50,6 +104,7 @@ function ListRoom() {
                     <td className="p-4 text-gray-600">
                       <label  className="inline-flex items-center cursor-pointer">
                         <input type="checkbox" 
+                          onChange={() => toggleRoomAvailability(room._id)}
                           className="form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out"
                           checked={room.isAvailable}
                         />

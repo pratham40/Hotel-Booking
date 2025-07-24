@@ -10,6 +10,6 @@ roomRouter.get("/",getRooms)
 
 roomRouter.get("/owner",authMiddleware,getOwnerRooms)
 
-roomRouter.get("/toogle-avalibility",authMiddleware,toggleRoomAvailability)
+roomRouter.post("/toogle-avalibility",authMiddleware,toggleRoomAvailability)
 
 export default roomRouter;
