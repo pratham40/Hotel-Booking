@@ -12,8 +12,12 @@ import hotelRouter from './routes/hotel.route.js';
 import roomRouter from './routes/room.routes.js';
 import bookingRouter from './routes/booking.route.js';
 
+
+connectDB();
+
 const app = express();
 app.use(cors());
+app.use(clerkMiddleware());
 app.use(morgan('dev'));
 
 cloudinary.config({
@@ -21,9 +25,6 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET
 })
-
-
-app.use(clerkMiddleware());
 
 
 
@@ -36,21 +37,14 @@ app.use("/clerk",express.json({type:'application/json'}),clerkWebhook)
 
 app.use("/api/users",express.json(),userRouter)
 
-app.use("/api/hotels",hotelRouter)
+app.use("/api/hotels",express.json(),hotelRouter)
 
-app.use("/api/rooms",roomRouter)
+app.use("/api/rooms",express.json(),roomRouter)
 
-app.use("/api/bookings",bookingRouter);
+app.use("/api/bookings",express.json(),bookingRouter);
 
 const PORT = process.env.PORT || 5000;
 
-const startServer = async () => {
-  try {
-    await connectDB();  // ✅ Ensures database is ready
-    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-  } catch (err) {
-    console.error('❌ Failed to connect DB:', err.message);
-  }
-};
-
-startServer();
+app.listen(PORT,()=>{
+    console.log(`Server is running on port ${PORT}`);
+})

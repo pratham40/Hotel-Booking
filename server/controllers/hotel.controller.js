@@ -9,12 +9,15 @@ export const registerHotel = async (req, res) => {
 
         const hotel = await Hotel.findOne({owner})
 
+        console.log(hotel)
+
         if (hotel) {
             return res.status(400).json({
                 success: false,
                 message: "You have already registered a hotel"
             });
         }
+
 
         const newHotel = await Hotel.create({
             name,

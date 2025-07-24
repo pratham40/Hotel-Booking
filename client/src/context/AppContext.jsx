@@ -31,6 +31,8 @@ export function AppProvider({children}) {
             // Check if user is authenticated and get token
             const token = await getToken();
 
+            console.log("Fetching user data with token:", token);
+
             const {data} = await axios.get("/api/users",{
                 headers:{
                     Authorization:`Bearer ${token}`
@@ -39,14 +41,13 @@ export function AppProvider({children}) {
             if (data.success) {
                 setIsOwner(data.role === 'admin');
                 setSearchCity(data.recentSerachCities)
+                toast.success("User data fetched successfully");
             }else{
                 setTimeout(()=>{
                     fetchUser();
                 },5000)
             }
         } catch (error) {
-            console.error("Error fetching user:", error);
-            
             toast.error("Failed to fetch user data. Please try again later.");
         }
     }

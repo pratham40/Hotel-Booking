@@ -1,4 +1,3 @@
-import React from 'react'
 import { cities } from '../assets/assets'
 import { SlCalender } from 'react-icons/sl'
 import { LuMapPinCheckInside } from 'react-icons/lu'

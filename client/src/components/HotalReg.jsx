@@ -20,7 +20,6 @@ function HotelReg() {
   async function handleSubmit(e) {
     e.preventDefault();
     const token = await getToken();
-    console.log("Submitting hotel registration with token:", token);
     try {
       const { data } = await axios.post(`/api/hotels/`,{
         name,
@@ -32,6 +31,8 @@ function HotelReg() {
           Authorization: `Bearer ${token}`
         }
       })
+
+      console.log(data)
 
       if (data?.success) {
         toast.success("Hotel registered successfully!");
