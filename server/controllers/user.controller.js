@@ -22,6 +22,8 @@ export const recentSerachCities = async (req, res) => {
         const {recentSerachCity} = req.body;
         const user = req.user;
 
+        console.log(recentSerachCity)
+
         if (user.recentSerachCities.length <3) {
             user.recentSerachCities.push(recentSerachCity);
         }else{
