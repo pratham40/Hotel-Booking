@@ -1,11 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Title from '../components/Title';
-import { userBookingsDummyData } from '../assets/assets';
 import { FaLocationArrow } from 'react-icons/fa';
 import { CiUser } from 'react-icons/ci';
+import { useAppContext } from '../context/AppContext';
+import toast from 'react-hot-toast';
 
 function MyBooking() {
-    const [bookings, setBookings] = useState(userBookingsDummyData);
+
+    const {axios,getToken,user} = useAppContext();
+
+    const [bookings, setBookings] = useState([]);
+
+    async function fetchBookings() {
+        try {
+            const token  = await getToken();
+            const {data} = await axios.get("/api/bookings/user",{
+                headers:{
+                    Authorization:`Bearer ${token}`
+                }
+            })
+
+            if (data.success) {
+                toast.success("user booking fetched successfully")
+                setBookings(data.bookings)
+            }else{
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(error.message);
+        }
+    }
+
+    useEffect(()=>{
+        if (user) {
+            fetchBookings();
+        }
+    },[user])
 
     return (
         <div className="px-4 py-20 md:px-16 lg:px-24 xl:px-32 bg-gray-50 min-h-screen">
