@@ -25,11 +25,14 @@ async function checkAvailabilityApi(req,res) {
     try {
         const {checkInDate, checkOutDate, room} = req.body;
 
+        console.log(checkInDate,checkOutDate,room)
+
         const isAvail = await checkAvailability({checkInDate, checkOutDate, room});
 
         return res.status(200).json({
             success: true,
-            message: isAvail ? "Room is available" : "Room is not available"
+            message: isAvail ? "Room is available" : "Room is not available",
+            isAvail
         });
     } catch (error) {
         console.error("Error checking availability:", error);

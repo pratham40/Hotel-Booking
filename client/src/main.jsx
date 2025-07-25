@@ -17,25 +17,7 @@ createRoot(document.getElementById('root')).render(
   <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
     <Toaster
       position="bottom-right"
-      reverseOrder={false}
-      toastOptions={{
-        style: {
-          background: '#333',
-          color: '#fff',
-        },
-        success: {
-          duration: 3000,
-          style: {
-            background: '#4caf50',
-          },
-        },
-        error: {
-          duration: 3000,
-          style: {
-            background: '#f44336',
-          },
-        },
-      }}/>
+      />
       <BrowserRouter>
         <AppProvider>
           <App />
