@@ -2,6 +2,7 @@
 import Booking from "../models/booking.model.js";
 import Room from "../models/room.model.js";
 import Hotel from "../models/hotel.model.js";
+import transporter from "../utils/mailer.js";
 
 
 async function checkAvailability({checkInDate,checkOutDate,room}) {
@@ -49,7 +50,11 @@ async function createBooking(req,res,next) {
         const {room,checkInDate,checkOutDate,guests} = req.body;
         const user = req.user._id;
 
+
         const isAvail = await checkAvailability({checkInDate, checkOutDate, room});
+
+
+        console.log(isAvail)
 
         if (!isAvail) {
             return res.status(400).json({
@@ -60,6 +65,9 @@ async function createBooking(req,res,next) {
 
         const roomData = await Room.findById(room)
                                    .populate('hotel');
+
+        
+        console.log(roomData)
 
         const roomPrice = roomData.pricePerNight
 
@@ -79,6 +87,30 @@ async function createBooking(req,res,next) {
             totalPrice,
             guests:+guests,
         })
+
+        // const mailOptions = {
+        //     from:process.env.SENDER_MAIL,
+        //     to:req.user.email,
+        //     subject:"Hotel booking detail",
+        //     html:`
+        //     <h2>Booking Details</h2>
+        //     <p>Dear ${req.user.username},</p>
+        //     <p>Your booking at <strong>${roomData.hotel.name}</strong> has been confirmed.</p>
+        //     <ul>
+        //         <li><strong>Hotel:</strong> ${roomData.hotel.name}</li>
+        //         <li><strong>Room:</strong> ${roomData.name}</li>
+        //         <li><strong>Check-in Date:</strong> ${checkIn.toDateString()}</li>
+        //         <li><strong>Check-out Date:</strong> ${checkOut.toDateString()}</li>
+        //         <li><strong>Guests:</strong> ${guests}</li>
+        //         <li><strong>Total Price:</strong> $${totalPrice}</li>
+        //     </ul>
+        //     <p>Thank you for booking with us!</p>`
+        // }
+
+        // console.log(mailOptions)
+
+        // await transporter.sendMail(mailOptions);
+
 
         return res.status(201).json({
             success: true,
