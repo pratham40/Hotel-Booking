@@ -186,7 +186,7 @@ function RoomDetail() {
                     </div>
                 </div>
                 <button type='submit' className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition">
-                    {isAvailable ? "Book now" : "Room Not Available"}
+                    {isAvailable ? "Book now" : "Check Availability"}
                 </button>
             </form>
 
