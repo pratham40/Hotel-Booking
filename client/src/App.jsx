@@ -41,7 +41,7 @@ function App() {
 
           </Routes>
         </div>
-        <Footer/>
+        {!isOwnerPath && <Footer/>}
       </div>
   )
 }
