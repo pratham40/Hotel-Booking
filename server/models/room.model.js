@@ -21,7 +21,6 @@ const roomSchema = new Schema({
     images:[
         {
             type: String,
-            
         }
     ],
     isAvailable:{

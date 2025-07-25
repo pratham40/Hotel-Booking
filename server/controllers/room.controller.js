@@ -31,17 +31,24 @@ export const createRoom = async (req, res) => {
 
         console.log(images);
 
-        let amenties = Array.isArray(amenities) ? amenities : amenities.split(',');
+
+        let x;
+
+        x = amenities ? JSON.parse(amenities) : [];
+
+        console.log(x);
 
 
-
-        await Room.create({
+        const newRoom=await Room.create({
             hotel: hotel._id,
             roomType,
             pricePerNight:+pricePerNight,
-            amenties,
+            amenties: x,
             images
         })
+
+        console.log(newRoom)
+
 
         return res.status(201).json({
             success: true,
@@ -50,7 +57,7 @@ export const createRoom = async (req, res) => {
                 hotel: hotel._id,
                 roomType,
                 pricePerNight,
-                amenties: amenties,
+                amenities,
                 images
             }
         });
