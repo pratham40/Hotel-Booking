@@ -3,7 +3,7 @@ import Booking from "../models/booking.model.js";
 import Room from "../models/room.model.js";
 import Hotel from "../models/hotel.model.js";
 import transporter from "../utils/mailer.js";
-
+import Stripe from "stripe";
 
 async function checkAvailability({checkInDate,checkOutDate,room}) {
     const bookings = await Booking.find({
@@ -193,6 +193,7 @@ async function getHotelBooking(req,res) {
 async function stripePayment(req,res) {
     try {
         const {bookingId} = req.body;
+
         const booking = await Booking.findById(bookingId)
         if (!booking) {
             return res.status(404).json({
@@ -200,6 +201,7 @@ async function stripePayment(req,res) {
                 message: "Booking not found"
             });
         }
+
 
         const room = await Room.findById(booking.room)
                                .populate('hotel');
@@ -211,11 +213,50 @@ async function stripePayment(req,res) {
             });
         }
 
+
         const totalPrice = booking.totalPrice;
 
+        const {origin} = req.headers;
+
+
+        const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+
+        const line_items = [
+            {
+                price_data:{
+                    currency: 'usd',
+                    product_data: {
+                        name: room.hotel.name
+                    },
+                    unit_amount: totalPrice * 100
+                },
+                quantity: 1
+            }
+        ]
+
+        const session = await stripeInstance.checkout.sessions.create({
+            line_items,
+            mode: 'payment',
+            success_url:`${origin}/loader/my-bookings`,
+            cancel_url:`${origin}/my-bookings`,
+            metadata:{
+                bookingId
+            }
+        })
+
+
+        return res.status(200).json({
+            success:true,
+            url:session.url
+        })
+
     } catch (error) {
-        
+        return res.status(500).json({
+            success:false,
+            message:"payment failed"
+        })
     }
 }
 
-export { checkAvailabilityApi, createBooking, getUserBooking,getHotelBooking };
+export { checkAvailabilityApi, createBooking, getUserBooking,getHotelBooking,stripePayment };

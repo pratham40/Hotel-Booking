@@ -11,12 +11,16 @@ import clerkWebhook from './controllers/clerkWebhook.js';
 import hotelRouter from './routes/hotel.route.js';
 import roomRouter from './routes/room.routes.js';
 import bookingRouter from './routes/booking.route.js';
+import stripeWebhook from './controllers/stripe.webhook.js';
 
 
 connectDB();
 
 const app = express();
 app.use(cors());
+
+app.post("/api/stripe",express.raw({type: 'application/json'}), stripeWebhook)
+
 app.use(clerkMiddleware());
 app.use(morgan('dev'));
 
