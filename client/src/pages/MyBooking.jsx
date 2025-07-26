@@ -31,6 +31,28 @@ function MyBooking() {
         }
     }
 
+    async function handlePayment(bookingId) {
+        try{
+            const token = await getToken();
+            const {data} = await axios.post('api/bookings/stripe-payment', {
+                bookingId
+            },{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            if (data.success) {
+                window.location.href = data.url;
+            }else{
+                toast.error(data.message || "Failed to initiate payment. Please try again."); 
+            }
+        } catch (error) {
+            toast.error("Payment failed. Please try again later.");
+            console.error("Payment error:", error);
+        }
+    }
+
     useEffect(()=>{
         if (user) {
             fetchBookings();
@@ -109,7 +131,9 @@ function MyBooking() {
                         {booking.isPaid ? 'Paid' : 'Not Paid'}
                     </span>
                     {!booking.isPaid && (
-                        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm shadow transition">
+                        <button
+                        onClick={()=>handlePayment(booking._id)}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm shadow transition">
                             Pay Now
                         </button>
                     )}
