@@ -69,6 +69,15 @@ async function createBooking(req,res,next) {
         
         console.log(roomData)
 
+        if (user.toString() === roomData.hotel.owner.toString()) {
+            console.warn("User is the owner of the room, cannot book own room");
+            return res.status(404).json({
+                success: false,
+                message: "You are not authorized to book this room"
+            });
+            
+        }
+
         const roomPrice = roomData.pricePerNight
 
         const checkIn = new Date(checkInDate);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { facilityIcons, roomCommonData } from '../assets/assets';
 import { FaLocationArrow } from 'react-icons/fa';
