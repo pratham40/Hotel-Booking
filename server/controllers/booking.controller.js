@@ -74,7 +74,11 @@ async function createBooking(req,res,next) {
         const checkIn = new Date(checkInDate);
         const checkOut = new Date(checkOutDate);
 
-        const nights = Math.ceil(checkIn.getTime()- checkOut.getTime() / (1000 * 60 * 60 * 24));
+        const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+
+        console.log("Nights:", nights)
+
+
 
         const totalPrice = nights * roomPrice;
 
@@ -183,6 +187,35 @@ async function getHotelBooking(req,res) {
         message: "No bookings found for this hotel"
     });
 
+}
+
+
+async function stripePayment(req,res) {
+    try {
+        const {bookingId} = req.body;
+        const booking = await Booking.findById(bookingId)
+        if (!booking) {
+            return res.status(404).json({
+                success: false,
+                message: "Booking not found"
+            });
+        }
+
+        const room = await Room.findById(booking.room)
+                               .populate('hotel');
+
+        if (!room) {
+            return res.status(404).json({
+                success: false,
+                message: "Room not found"
+            });
+        }
+
+        const totalPrice = booking.totalPrice;
+
+    } catch (error) {
+        
+    }
 }
 
 export { checkAvailabilityApi, createBooking, getUserBooking,getHotelBooking };
